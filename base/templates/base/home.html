@@ -71,8 +71,10 @@
                     <a class="room-name" href="/room/{{room.id}}">{{ room.name }}</a><br><br>
                     <span>Host: @{{ room.host.username }}</span> <br>
                     <span>Topic: {{ room.topic.name }}</span><br><br>
-                    <a href="/update-room/{{room.id}}">Edit Room</a>
-                    <a href="/delete-room/{{room.id}}">Delete Room</a>
+                    {% if request.user == request.host %}
+                        <a href="/update-room/{{room.id}}">Edit Room</a>
+                        <a href="/delete-room/{{room.id}}">Delete Room</a>
+                    {% endif %}
                 </h4>
             </div>
             <hr>
