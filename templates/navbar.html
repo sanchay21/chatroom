@@ -3,4 +3,12 @@
         <h1>TENSOR's CHATROOM</h1>
     </a>
 </center>
+
+{% if request.user.is_authenticated %}
+    <h3>Hello, {{ user.username }}</h3>
+    <a href="/logout">Logout</a>
+{% else %}
+    <a href="/login">Login</a>
+{% endif %}
+
 <hr>
