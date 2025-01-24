@@ -6,6 +6,8 @@
     HOME HTML PAGE 
 </h1>
 
+<a href="/create-room">Create Room</a>
+
 <div class="rooms-container">
     {% for room in rooms %}
         <div>
@@ -13,8 +15,11 @@
                 <a href="/room/{{room.id}}">{{ room.id }} -- {{ room.name }}</a><br>
                 <span>Host: @{{ room.host.username }}</span> <br>
                 <span>Topic: {{ room.topic.name }}</span><br>
+                <a href="/update-room/{{room.id}}">Edit Room</a>
+                <a href="/delete-room/{{room.id}}">Delete Room</a>
             </h4>
         </div>
+        <hr>
     {% endfor %}
 </div>
 
