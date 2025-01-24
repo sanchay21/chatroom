@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Room
+from .models import Room, Topic
 from .forms import RoomForm
 # from django.http import HttpResponse
 # Create your views here.
@@ -21,8 +21,13 @@ from .forms import RoomForm
 # ]
 
 def home(request):
-    rooms = Room.objects.all()
-    context = {'rooms':rooms}
+    topics = Topic.objects.all()
+
+    if request.method == "GET":
+        q = request.GET.get('q', '')
+    rooms = Room.objects.filter(topic__name__icontains = q)
+        
+    context = {'rooms':rooms, 'topics':topics}
     return render(request, 'base/home.html', context)
 
 def room(request, pk):

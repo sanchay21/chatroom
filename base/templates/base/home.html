@@ -1,26 +1,83 @@
-{% include 'navbar.html' %}
+{% include 'main.html' %}
+
+{% block head %}
+<style>
+    .mainbox {
+        display: flex;
+    }
+
+    .browse-topics {
+        width: 25%;
+        height: 80vh;  /* Set a fixed height for scrolling */
+        border-right: 1px solid #BEBEBE;
+        overflow-y: auto;  /* Enables vertical scrolling */
+        padding-right: 10px;  /* Optional: for better spacing */
+    }
+
+    .topic-box {
+        margin-top: 10px;
+        height: 10vh;  /* Make sure the height of the topic box is consistent */
+        font-size: 20px;
+        font-family: sans-serif;
+        border-top: 1px solid #BEBEBE;
+        background-color: #2e2d2d;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+
+    }
+
+    .rooms-container {
+        width: 75%;
+        background-color: #2e2d2d;
+        padding: 20px;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .room-name{
+        color: #0655d4;
+        font-size: 35px;
+    }
+
+    .rooms-container h4 {
+        font-size: 1.5em;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-
 <h1>
-    HOME HTML PAGE 
+    HOME PAGE 
 </h1>
 
 <a href="/create-room">Create Room</a>
 
-<div class="rooms-container">
-    {% for room in rooms %}
-        <div>
-            <h4>
-                <a href="/room/{{room.id}}">{{ room.id }} -- {{ room.name }}</a><br>
-                <span>Host: @{{ room.host.username }}</span> <br>
-                <span>Topic: {{ room.topic.name }}</span><br>
-                <a href="/update-room/{{room.id}}">Edit Room</a>
-                <a href="/delete-room/{{room.id}}">Delete Room</a>
-            </h4>
-        </div>
-        <hr>
-    {% endfor %}
+<div class="mainbox">
+    <div class="browse-topics">
+        {% for topic in topics %}
+            <div class="topic-box">
+                <a href="/?q={{topic}}" class="topic-name">{{ topic }}</a>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="rooms-container">
+        {% for room in rooms %}
+            <div>
+                <h4>
+                    <a class="room-name" href="/room/{{room.id}}">{{ room.name }}</a><br><br>
+                    <span>Host: @{{ room.host.username }}</span> <br>
+                    <span>Topic: {{ room.topic.name }}</span><br><br>
+                    <a href="/update-room/{{room.id}}">Edit Room</a>
+                    <a href="/delete-room/{{room.id}}">Delete Room</a>
+                </h4>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock content %}
