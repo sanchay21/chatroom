@@ -103,6 +103,16 @@ def loginPage(request):
     return render(request, 'base/login_register.html', context)
 
 def signupUser(request):
+    if(request.method == "POST"):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username Already Exists')
+            return redirect('signup')
+        user = User.objects.create_user(username=username, password=password)
+        user.save()
+        
     context = {'obj':'signup'}
     return render(request, 'base/login_register.html', context)
 
