@@ -9,15 +9,36 @@
             <li>{{ message }}</li>
         {% endfor %}
     {% endif %}
-    <center>
-        <h2>LOGIN</h2>
-        <div class="login-form">
-            <form method="POST" action="">
-                {% csrf_token %}
-                <input type="text" name="username" placeholder="Username"><br><br>
-                <input type="password" name="password" placeholder="password"><br><br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-    </center>
+    
+    {% if obj == 'login' %}
+        <center>
+            <h2>LOGIN</h2>
+            <div class="login-form">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="Username"><br><br>
+                    <input type="password" name="password" placeholder="password"><br><br>
+                    <input type="submit" value="Login">
+                </form>
+
+                <p>Have'nt Registered Yet? <a href="/signup/">Register</a></p>
+            </div>
+        </center>
+
+    {% elif obj == 'signup' %}
+        <center>
+            <h2>SIGNUP</h2>
+            <div class="login-form">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="Enter a Username"><br><br>
+                    <input type="password" name="password" placeholder="Enter Password"><br><br>
+                    <input type="submit" value="Signup">
+                </form>
+
+                <p>Already Have An Account? <a href="/login/">Login</a></p>
+            </div>
+        </center>
+    {% endif %}
 {% endblock content %}
+

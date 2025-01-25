@@ -1,13 +1,144 @@
 {% extends 'main.html' %}
 
+{% block head %}
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .form-container {
+            margin-top: 20px;
+            height: 70%;
+            background-color: #2B2B2B;  
+            color: white;
+            width: 80%;
+            margin-left: 10%;
+            display: flex;         
+            flex-direction: column; 
+            justify-content: flex-end; 
+            padding: 10px;          
+        }
+
+        .show-messages {
+            flex-grow: 1;            /* Take up remaining space in the container */
+            overflow-y: auto;        /* Add vertical scrolling if messages overflow */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            color: white;
+            display: flex;           /* Flexbox for vertical alignment */
+            flex-direction: column;
+        }
+        
+        .show-messages p {
+            margin: 5px 0;           /* Add spacing between messages */
+            word-wrap: break-word;   /* Break long words to avoid overflow */
+
+        } 
+        
+        .msg{
+            background-color: #3E3E3E;
+            width: auto;
+            font-family: sans-serif;
+            word-wrap: break-word;   /* Break long words to prevent overflow */
+            line-height: 1.5;        /* Improve readability */
+            display: inline-block;   /* Allow the message to fit its content */
+            max-width: 70%; 
+            padding: 10px;
+            border-radius: 15px;
+            margin-top:5px;
+        }
+
+        .input-box {
+            margin-left: 5%;
+            width: 90%;   
+        }
+
+        .msg.left {
+            align-self: flex-start;  /* Align messages from others to the left */
+            background-color: #3E3E3E; /* Slightly darker background for contrast */
+        }
+        
+        .msg.right {
+            align-self: flex-end;    /* Align messages from the user to the right */
+            background-color: #0655d4; /* Blue background for the user */
+            color: white;
+        }
+
+        .msg_input {
+            width: 80%;            
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;    
+            background-color: #3E3E3E;
+            border: none;
+            color: white;
+            border-radius: 10px;
+
+        }
+
+        .msg_btn {
+            background-color: #0655d4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px; 
+            width: 10%;  
+        }
+
+        .msg_btn:hover {
+            background-color: #0547a8; 
+        }
+    </style>
+
+{% endblock head %}
+
 {% block content %}
-<h1>
-    CHATROOM
-</h1>
-<h3>
-    {{ room.name }}
-</h3>
-<div>
-    {{ room.desc }}
+<div style="height:5%; line-height: 2px;">
+    <center>
+        <p style="font-size: 30px;">
+            {{ room.name }}
+        </p>
+        <p style="font-size: 15px;">{{ room.desc }}</p>
+    </center>
+</div>
+
+<div class="form-container">
+
+    <div class="show-messages">
+        {% for message in messages %}
+            {% if message.user.username == request.user.username %}
+                <div class="msg right">
+                    <strong>{{ message.user.username }}</strong>: {{ message.body }}
+                    <br><small>{{ message.created }}</small>
+                </div>
+            {% else %}
+                <div class="msg left">
+                    <strong>{{ message.user.username }}</strong>: {{ message.body }}
+                    <br><small>{{ message.created }}</small>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="input-box">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input class="msg_input" type="text" name="message" placeholder="Send Message">
+            <input class="msg_btn" type="submit" value="Send">
+        </form>
+    </div>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+    <script>
+        window.onload = function() {
+            const messagesContainer = document.querySelector('.show-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+{% endblock scripts %}

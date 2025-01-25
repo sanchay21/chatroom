@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -37,7 +37,14 @@ def home(request):
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
-    context = {'room':room}
+    message = Message.objects.filter(room=room).order_by('created')
+
+    if(request.method == "POST"):
+        message_body = request.POST.get('message')
+        Message.objects.create(user = request.user, room=room, body = message_body)
+        return redirect('room', pk=pk)
+    
+    context = {'room':room,'messages':message}
     return render(request, 'base/room.html', context)
 
 def createRoom(request):
@@ -73,6 +80,9 @@ def deleteRoom(request,pk):
 
 def loginPage(request):
 
+    if(request.user.is_authenticated):
+        return redirect('home')
+
     if(request.method == "POST"):
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -90,6 +100,10 @@ def loginPage(request):
         else:
             messages.error(request, 'Username OR Password Does Not Match')
     context = {'obj':'login'}
+    return render(request, 'base/login_register.html', context)
+
+def signupUser(request):
+    context = {'obj':'signup'}
     return render(request, 'base/login_register.html', context)
 
 def logoutPage(request):
